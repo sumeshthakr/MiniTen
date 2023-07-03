@@ -1,5 +1,5 @@
 # vector_operations.pyx
-
+import cython
 import numpy as np
 cimport numpy as np
 
