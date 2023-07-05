@@ -1,7 +1,7 @@
 # vector_operations.pyx
 
 import numpy as np
-cimport numpy as np
+#cimport numpy as np
 
 # Vector addition
 cpdef np.ndarray[np.float64_t, ndim=1] vector_addition(np.ndarray[np.float64_t, ndim=1] a, np.ndarray[np.float64_t, ndim=1] b):
