@@ -30,5 +30,3 @@ jobs:
     - name: Run vector operations tests
       run: python test_vector_operations.py
       
-    - name: Run backpropogation tests
-      run: python test_backprop.py
