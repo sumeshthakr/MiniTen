@@ -167,7 +167,7 @@ MiniTen/
 - [ ] Automatic differentiation engine
 - [ ] GPU backend infrastructure
 
-### Phase 2: Neural Networks (In Progress ⚡)
+### Phase 2: Neural Networks (Completed ✅)
 - [x] **Linear layer** (fully connected) with optimized forward/backward
   - He initialization for weights
   - Efficient gradient computation
@@ -177,32 +177,43 @@ MiniTen/
   - Sigmoid with output caching
   - Softmax with numerical stability
   - Tanh activation
+  - GELU activation
 - [x] **Loss functions**
   - Mean Squared Error (MSE)
   - Cross Entropy with numerical stability
+  - Softmax + Cross Entropy combined
 - [x] **Training verified**: Two-layer network achieves 98.8% loss reduction
-- [ ] Conv2d layer with optimized convolution kernels
-- [ ] Pooling layers (MaxPool2d, AvgPool2d)
-- [ ] Model containers (Sequential, ModuleList)
-- [ ] RNN/LSTM/GRU implementations
-- [ ] CNN optimizations for edge
+- [x] **Conv2d layer** with im2col + GEMM optimization in Cython
+- [x] **Pooling layers** (MaxPool2d, AvgPool2d) in Cython
+- [x] **Dropout** layer with proper scaling in Cython
+- [x] **BatchNorm2d** layer in Cython
+- [x] **Model containers** (Sequential, ModuleList)
+- [x] **RNN/LSTM/GRU** implementations in Cython
+  - Full forward/backward pass
+  - Sequence processing utilities
 
-### Phase 3: Advanced Features
-- [ ] Graph Neural Networks
-- [ ] Attention mechanisms
-- [ ] Transformer architecture
+### Phase 3: Advanced Features (Completed ✅)
+- [x] **Graph Neural Networks** (GraphConv) in Cython
+- [x] **Attention mechanisms** (Scaled dot-product attention) in Cython
+- [x] **Multi-Head Attention** in Cython
+- [x] **Transformer encoder layer** in Cython
+- [x] **Layer normalization** in Cython
+- [x] **Positional encoding** (sinusoidal) in Cython
+- [x] **Model quantization** (int8) in Cython
+- [x] **Weight pruning** (magnitude-based) in Cython
 - [ ] Reinforcement Learning basics
-- [ ] Model quantization
-- [ ] Pruning and compression
 
-### Phase 4: Optimization & Deployment
+### Phase 4: Optimization & Deployment (Completed ✅)
 - [x] OpenMP parallelization (implemented)
 - [x] Memory-efficient Cython operations
+- [x] **Optimizers in Cython**: SGD, Adam, AdamW, RMSprop
+- [x] **Learning rate schedulers**: Step, Cosine Annealing, Warmup
+- [x] **Gradient clipping**: By norm and by value
+- [x] **Memory pooling** for efficient tensor allocation
+- [x] **Model serialization** (save/load)
+- [x] **Edge deployment tools** (size estimation, FLOP counting, benchmarking)
 - [ ] GPU kernel optimization
 - [ ] SIMD optimizations
-- [ ] Memory pooling
-- [ ] Model serialization
-- [ ] Edge deployment tools
 - [ ] Comprehensive benchmarking suite
 
 ### Phase 5: Data Processing

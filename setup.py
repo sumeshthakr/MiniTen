@@ -55,6 +55,9 @@ def get_extensions():
     # Neural network module extensions (with OpenMP)
     nn_sources = [
         "miniten/nn/layers_impl.pyx",
+        "miniten/nn/cnn_impl.pyx",
+        "miniten/nn/rnn_impl.pyx",
+        "miniten/nn/advanced_impl.pyx",
     ]
     
     for source_file in nn_sources:
@@ -78,6 +81,39 @@ def get_extensions():
     for source_file in root_sources:
         if os.path.exists(source_file):
             module_name = source_file.replace(".pyx", "")
+            extension = Extension(
+                module_name,
+                [source_file],
+                include_dirs=[numpy.get_include()],
+                extra_compile_args=other_compile_args,
+            )
+            extensions.append(extension)
+    
+    # Optimizer extensions (with OpenMP)
+    optim_sources = [
+        "miniten/optim/optim_impl.pyx",
+    ]
+    
+    for source_file in optim_sources:
+        if os.path.exists(source_file):
+            module_name = source_file.replace("/", ".").replace(".pyx", "")
+            extension = Extension(
+                module_name,
+                [source_file],
+                include_dirs=[numpy.get_include()],
+                extra_compile_args=other_compile_args + openmp_compile_args,
+                extra_link_args=openmp_link_args,
+            )
+            extensions.append(extension)
+    
+    # Utils extensions
+    utils_sources = [
+        "miniten/utils/deployment.pyx",
+    ]
+    
+    for source_file in utils_sources:
+        if os.path.exists(source_file):
+            module_name = source_file.replace("/", ".").replace(".pyx", "")
             extension = Extension(
                 module_name,
                 [source_file],
