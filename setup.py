@@ -122,6 +122,23 @@ def get_extensions():
             )
             extensions.append(extension)
     
+    # Visualization module extensions (with OpenMP for rendering)
+    viz_sources = [
+        "miniten/viz/render_impl.pyx",
+    ]
+    
+    for source_file in viz_sources:
+        if os.path.exists(source_file):
+            module_name = source_file.replace("/", ".").replace(".pyx", "")
+            extension = Extension(
+                module_name,
+                [source_file],
+                include_dirs=[numpy.get_include()],
+                extra_compile_args=other_compile_args + openmp_compile_args,
+                extra_link_args=openmp_link_args,
+            )
+            extensions.append(extension)
+    
     return extensions
 
 
