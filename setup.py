@@ -52,6 +52,23 @@ def get_extensions():
             )
             extensions.append(extension)
     
+    # Neural network module extensions (with OpenMP)
+    nn_sources = [
+        "miniten/nn/layers_impl.pyx",
+    ]
+    
+    for source_file in nn_sources:
+        if os.path.exists(source_file):
+            module_name = source_file.replace("/", ".").replace(".pyx", "")
+            extension = Extension(
+                module_name,
+                [source_file],
+                include_dirs=[numpy.get_include()],
+                extra_compile_args=other_compile_args + openmp_compile_args,
+                extra_link_args=openmp_link_args,
+            )
+            extensions.append(extension)
+    
     # Root level extensions (for backward compatibility with tests)
     root_sources = [
         "vector_operations.pyx",
