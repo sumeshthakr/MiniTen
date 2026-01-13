@@ -35,6 +35,23 @@ def get_extensions():
             )
             extensions.append(extension)
     
+    # Root level extensions (for backward compatibility with tests)
+    root_sources = [
+        "vector_operations.pyx",
+        "backprop.pyx",
+    ]
+    
+    for source_file in root_sources:
+        if os.path.exists(source_file):
+            module_name = source_file.replace(".pyx", "")
+            extension = Extension(
+                module_name,
+                [source_file],
+                include_dirs=[numpy.get_include()],
+                extra_compile_args=["-O3", "-march=native"] if sys.platform != "win32" else [],
+            )
+            extensions.append(extension)
+    
     return extensions
 
 

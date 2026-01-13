@@ -22,7 +22,7 @@ jobs:
       uses: actions/checkout@v2
     
     - name: Install dependencies
-      run: pip install numpy cython
+      run: pip install setuptools numpy cython
     
     - name: Build Cython modules
       run: python setup.py build_ext --inplace
