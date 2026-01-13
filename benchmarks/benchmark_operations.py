@@ -73,11 +73,13 @@ def print_comparison(operation_name, results):
     print(f"{'Library':<15} {'Mean (μs)':<12} {'Min (μs)':<12} {'Std (μs)':<12}")
     print(f"{'-'*60}")
     
-    baseline = None
+    # Always use NumPy as baseline for comparison
+    numpy_baseline = results.get('numpy', {}).get('mean_us', None)
     for lib_name, result in results.items():
-        if baseline is None:
-            baseline = result['mean_us']
-        speedup = baseline / result['mean_us'] if result['mean_us'] > 0 else 0
+        if numpy_baseline is not None and result['mean_us'] > 0:
+            speedup = numpy_baseline / result['mean_us']
+        else:
+            speedup = 0
         speedup_str = f"({speedup:.2f}x)" if lib_name != 'numpy' else "(baseline)"
         print(f"{lib_name:<15} {result['mean_us']:<12.2f} {result['min_us']:<12.2f} {result['std_us']:<12.2f} {speedup_str}")
 

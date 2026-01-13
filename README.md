@@ -229,18 +229,18 @@ MiniTen provides Cython-optimized implementations compared to pure Python.
 
 | Configuration | Training Speedup | Inference Speedup |
 |--------------|-----------------|------------------|
-| XOR (2-4-1)  | 1.58x | 1.88x |
-| XOR (2-16-1) | 1.45x | 1.87x |
-| XOR (2-64-1) | 1.43x | 1.86x |
+| XOR (2-4-1)  | 1.44x | 1.86x |
+| XOR (2-16-1) | 1.30x | 1.88x |
+| XOR (2-64-1) | 1.29x | 1.86x |
 
 **Vector Operations (vs NumPy):**
 
 | Operation | Small Vectors (100) | Large Vectors (100K) |
 |-----------|---------------------|----------------------|
-| Vector Addition | 1.75x slower | 1.17x slower |
-| Dot Product | 1.15x faster | 28x slower |
-| Element-wise Multiply | 1.90x slower | 1.08x slower |
-| Scalar Multiply | 1.35x faster | 1.81x slower |
+| Vector Addition | 1.95x slower | 1.22x slower |
+| Dot Product | 1.14x faster | 38x slower |
+| Element-wise Multiply | 1.88x slower | 1.01x slower |
+| Scalar Multiply | 1.17x faster | 1.76x slower |
 
 > **Note**: NumPy uses highly optimized BLAS/LAPACK libraries with SIMD instructions.
 > MiniTen's focus is on educational value, minimal footprint, and edge computing—not

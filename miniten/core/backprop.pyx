@@ -28,10 +28,9 @@ cdef class BackPropagation:
     cdef np.ndarray sigmoid(self, np.ndarray x):
         return 1.0 / (1.0 + np.exp(-x))
     
-    # Derivative of sigmoid activation function
-    cdef np.ndarray sigmoid_derivative(self, np.ndarray x):
-        cdef np.ndarray sigmoid_x = self.sigmoid(x)
-        return sigmoid_x * (1 - sigmoid_x)
+    # Derivative of sigmoid when given already-activated values (sigmoid output)
+    cdef np.ndarray sigmoid_derivative_of_activated(self, np.ndarray activated):
+        return activated * (1 - activated)
     
     # Forward pass through the network (public method)
     cpdef np.ndarray forward(self, np.ndarray X):
@@ -44,7 +43,7 @@ cdef class BackPropagation:
         cdef np.ndarray hidden_layer = self.sigmoid(np.dot(self.weights1, X) + self.bias1)
         cdef np.ndarray output_layer = self.sigmoid(np.dot(self.weights2, hidden_layer) + self.bias2)
         
-        cdef np.ndarray delta2 = (output_layer - y) * self.sigmoid_derivative(output_layer)
+        cdef np.ndarray delta2 = (output_layer - y) * self.sigmoid_derivative_of_activated(output_layer)
         cdef np.ndarray d_weights2 = np.outer(delta2, hidden_layer)
         cdef np.ndarray d_bias2 = delta2
         
@@ -52,7 +51,7 @@ cdef class BackPropagation:
         self.weights2 -= learning_rate * d_weights2
         self.bias2 -= learning_rate * d_bias2
         
-        cdef np.ndarray delta1 = np.dot(self.weights2.T, delta2) * self.sigmoid_derivative(hidden_layer)
+        cdef np.ndarray delta1 = np.dot(self.weights2.T, delta2) * self.sigmoid_derivative_of_activated(hidden_layer)
         cdef np.ndarray d_weights1 = np.outer(delta1, X)
         cdef np.ndarray d_bias1 = delta1
         

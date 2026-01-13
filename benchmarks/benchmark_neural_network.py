@@ -48,9 +48,9 @@ class PythonBackPropagation:
     def sigmoid(self, x):
         return 1.0 / (1.0 + np.exp(-np.clip(x, -500, 500)))
     
-    def sigmoid_derivative(self, x):
-        sigmoid_x = self.sigmoid(x)
-        return sigmoid_x * (1 - sigmoid_x)
+    def sigmoid_derivative_of_activated(self, activated):
+        """Derivative of sigmoid when given already-activated values (sigmoid output)."""
+        return activated * (1 - activated)
     
     def forward(self, X):
         hidden_layer = self.sigmoid(np.dot(self.weights1, X) + self.bias1)
@@ -61,14 +61,14 @@ class PythonBackPropagation:
         hidden_layer = self.sigmoid(np.dot(self.weights1, X) + self.bias1)
         output_layer = self.sigmoid(np.dot(self.weights2, hidden_layer) + self.bias2)
         
-        delta2 = (output_layer - y) * self.sigmoid_derivative(output_layer)
+        delta2 = (output_layer - y) * self.sigmoid_derivative_of_activated(output_layer)
         d_weights2 = np.outer(delta2, hidden_layer)
         d_bias2 = delta2
         
         self.weights2 -= learning_rate * d_weights2
         self.bias2 -= learning_rate * d_bias2
         
-        delta1 = np.dot(self.weights2.T, delta2) * self.sigmoid_derivative(hidden_layer)
+        delta1 = np.dot(self.weights2.T, delta2) * self.sigmoid_derivative_of_activated(hidden_layer)
         d_weights1 = np.outer(delta1, X)
         d_bias1 = delta1
         
