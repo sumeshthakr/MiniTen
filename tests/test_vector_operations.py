@@ -1,14 +1,14 @@
-# test_vector_operations.py
+# test_operations.py
 
 import numpy as np
-import vector_operations
+from miniten.core import operations
 
 
 def test_vector_addition():
     a = np.array([1, 2, 3], dtype=np.float64)
     b = np.array([4, 5, 6], dtype=np.float64)
     expected_result = np.array([5, 7, 9], dtype=np.float64)
-    result = vector_operations.vector_addition(a, b)
+    result = operations.vector_addition(a, b)
     assert np.array_equal(result, expected_result), "Test failed."
 
 
@@ -16,7 +16,7 @@ def test_scalar_multiplication():
     a = np.array([1, 2, 3], dtype=np.float64)
     scalar = 2
     expected_result = np.array([2, 4, 6], dtype=np.float64)
-    result = vector_operations.scalar_multiplication(a, scalar)
+    result = operations.scalar_multiplication(a, scalar)
     assert np.array_equal(result, expected_result), "Test failed."
 
 
@@ -24,7 +24,7 @@ def test_vector_multiplication():
     a = np.array([1, 2, 3], dtype=np.float64)
     b = np.array([4, 5, 6], dtype=np.float64)
     expected_result = np.array([4, 10, 18], dtype=np.float64)
-    result = vector_operations.vector_multiplication(a, b)
+    result = operations.vector_multiplication(a, b)
     assert np.array_equal(result, expected_result), "Test failed."
 
 
@@ -32,7 +32,7 @@ def test_dot_product():
     a = np.array([1, 2, 3], dtype=np.float64)
     b = np.array([4, 5, 6], dtype=np.float64)
     expected_result = 32.0
-    result = vector_operations.dot_product(a, b)
+    result = operations.dot_product(a, b)
     assert result == expected_result, "Test failed."
 
 
@@ -40,7 +40,7 @@ def test_vector_subtraction():
     a = np.array([4, 5, 6], dtype=np.float64)
     b = np.array([1, 2, 3], dtype=np.float64)
     expected_result = np.array([3, 3, 3], dtype=np.float64)
-    result = vector_operations.vector_subtraction(a, b)
+    result = operations.vector_subtraction(a, b)
     assert np.array_equal(result, expected_result), "Test failed."
 
 
@@ -48,7 +48,7 @@ def test_vector_division():
     a = np.array([4, 6, 8], dtype=np.float64)
     b = np.array([2, 3, 4], dtype=np.float64)
     expected_result = np.array([2, 2, 2], dtype=np.float64)
-    result = vector_operations.vector_division(a, b)
+    result = operations.vector_division(a, b)
     assert np.array_equal(result, expected_result), "Test failed."
 
 
@@ -56,7 +56,7 @@ def test_scalar_component():
     a = np.array([1, 2, 3], dtype=np.float64)
     b = np.array([4, 5, 6], dtype=np.float64)
     expected_result = np.array([8, 10, 12], dtype=np.float64)
-    result = vector_operations.scalar_component(a, b)
+    result = operations.scalar_component(a, b)
     assert np.array_equal(result, expected_result), "Test failed."
 
 
@@ -64,7 +64,7 @@ def test_cross_product():
     a = np.array([1, 0, 0], dtype=np.float64)
     b = np.array([0, 1, 0], dtype=np.float64)
     expected_result = np.array([0, 0, 1], dtype=np.float64)
-    result = vector_operations.cross_product(a, b)
+    result = operations.cross_product(a, b)
     assert np.array_equal(result, expected_result), "Test failed."
 
 
