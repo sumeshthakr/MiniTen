@@ -221,12 +221,39 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 📊 Performance
 
-MiniTen is designed to be:
-- **2-5x faster** than TensorFlow Lite on edge devices
-- **3-10x smaller** in binary size
-- **30-50% more power efficient** for inference
+### Benchmark Results
 
-Detailed benchmarks coming soon in the `benchmarks/` directory.
+MiniTen provides Cython-optimized implementations compared to pure Python.
+
+**Neural Network Training/Inference (vs Pure Python):**
+
+| Configuration | Training Speedup | Inference Speedup |
+|--------------|-----------------|------------------|
+| XOR (2-4-1)  | 1.44x | 1.86x |
+| XOR (2-16-1) | 1.30x | 1.88x |
+| XOR (2-64-1) | 1.29x | 1.86x |
+
+**Vector Operations (vs NumPy):**
+
+| Operation | Small Vectors (100) | Large Vectors (100K) |
+|-----------|---------------------|----------------------|
+| Vector Addition | 1.95x slower | 1.22x slower |
+| Dot Product | 1.14x faster | 38x slower |
+| Element-wise Multiply | 1.88x slower | 1.01x slower |
+| Scalar Multiply | 1.17x faster | 1.76x slower |
+
+> **Note**: NumPy uses highly optimized BLAS/LAPACK libraries with SIMD instructions.
+> MiniTen's focus is on educational value, minimal footprint, and edge computing—not
+> competing with production frameworks on raw speed.
+
+### MiniTen's Advantages
+
+- **Minimal footprint**: Pure Python/Cython with minimal dependencies
+- **Educational**: Clear, readable code for learning ML internals
+- **Customizable**: Easy to extend for custom hardware or specialized use cases
+- **Edge-optimized**: Designed for resource-constrained environments
+
+See detailed benchmarks in the [`benchmarks/`](benchmarks/) directory.
 
 ## 🔧 Requirements
 
