@@ -416,14 +416,85 @@ cpdef tuple cross_entropy_loss(np.ndarray[np.float64_t, ndim=2] predictions,
     
     for i in range(batch_size):
         target_idx = target_view[i]
+        # Clip prediction to avoid log(0)
+        pred_val = pred_view[i, target_idx]
+        if pred_val < eps:
+            pred_val = eps
         # Compute loss
-        loss = loss - log(pred_view[i, target_idx] + eps)
+        loss = loss - log(pred_val)
         # Compute gradient
         for j in range(num_classes):
             if j == target_idx:
-                grad_view[i, j] = -1.0 / (pred_view[i, target_idx] + eps) / batch_size
+                grad_view[i, j] = -1.0 / pred_val / batch_size
             else:
                 grad_view[i, j] = 0.0
+    
+    loss = loss / batch_size
+    return loss, grad
+
+
+@cython.boundscheck(False)
+@cython.wraparound(False)
+cpdef tuple softmax_cross_entropy_loss(np.ndarray[np.float64_t, ndim=2] logits,
+                                        np.ndarray[np.int64_t, ndim=1] targets):
+    """
+    Combined Softmax + Cross Entropy loss (numerically stable).
+    
+    This is more stable than computing softmax and cross_entropy separately.
+    
+    Args:
+        logits: Raw logits of shape (batch_size, num_classes)
+        targets: Target class indices of shape (batch_size,)
+        
+    Returns:
+        (loss, grad) where grad is gradient w.r.t. logits
+    """
+    cdef Py_ssize_t batch_size = logits.shape[0]
+    cdef Py_ssize_t num_classes = logits.shape[1]
+    cdef double[:, ::1] logits_view = logits
+    cdef long[::1] target_view = targets
+    cdef double loss = 0.0
+    cdef Py_ssize_t i, j
+    cdef long target_idx
+    cdef double max_val, sum_exp, temp
+    
+    # Compute softmax probabilities
+    cdef np.ndarray[np.float64_t, ndim=2] probs = np.empty((batch_size, num_classes), dtype=np.float64)
+    cdef double[:, ::1] probs_view = probs
+    
+    for i in range(batch_size):
+        # Find max for numerical stability
+        max_val = logits_view[i, 0]
+        for j in range(1, num_classes):
+            if logits_view[i, j] > max_val:
+                max_val = logits_view[i, j]
+        
+        # Compute exp and sum
+        sum_exp = 0.0
+        for j in range(num_classes):
+            temp = exp(logits_view[i, j] - max_val)
+            probs_view[i, j] = temp
+            sum_exp = sum_exp + temp
+        
+        # Normalize
+        for j in range(num_classes):
+            probs_view[i, j] = probs_view[i, j] / sum_exp
+    
+    # Compute loss and gradient
+    cdef np.ndarray[np.float64_t, ndim=2] grad = np.zeros((batch_size, num_classes), dtype=np.float64)
+    cdef double[:, ::1] grad_view = grad
+    
+    for i in range(batch_size):
+        target_idx = target_view[i]
+        # Compute loss: -log(prob[target])
+        loss = loss - log(probs_view[i, target_idx] + 1e-10)
+        
+        # Gradient of softmax + cross_entropy is simply: prob - one_hot(target)
+        for j in range(num_classes):
+            if j == target_idx:
+                grad_view[i, j] = (probs_view[i, j] - 1.0) / batch_size
+            else:
+                grad_view[i, j] = probs_view[i, j] / batch_size
     
     loss = loss / batch_size
     return loss, grad
