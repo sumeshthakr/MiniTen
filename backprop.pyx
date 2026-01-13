@@ -33,14 +33,14 @@ cdef class BackPropagation:
         cdef np.ndarray sigmoid_x = self.sigmoid(x)
         return sigmoid_x * (1 - sigmoid_x)
     
-    # Forward pass through the network
-    cdef np.ndarray forward(self, np.ndarray X):
+    # Forward pass through the network (public method)
+    cpdef np.ndarray forward(self, np.ndarray X):
         cdef np.ndarray hidden_layer = self.sigmoid(np.dot(self.weights1, X) + self.bias1)
         cdef np.ndarray output_layer = self.sigmoid(np.dot(self.weights2, hidden_layer) + self.bias2)
         return output_layer
     
-    # Backpropagation algorithm
-    cdef void backward(self, np.ndarray X, np.ndarray y, double learning_rate):
+    # Backpropagation algorithm (public method)
+    cpdef void backward(self, np.ndarray X, np.ndarray y, double learning_rate):
         cdef np.ndarray hidden_layer = self.sigmoid(np.dot(self.weights1, X) + self.bias1)
         cdef np.ndarray output_layer = self.sigmoid(np.dot(self.weights2, hidden_layer) + self.bias2)
         
