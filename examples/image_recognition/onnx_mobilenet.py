@@ -118,6 +118,7 @@ def run_onnx_mobilenet():
 
 def run_synthetic_onnx_demo():
     """Run a synthetic ONNX demo without downloading models."""
+    import tempfile
     
     print("\n" + "-"*40)
     print("Synthetic ONNX Demonstration")
@@ -169,8 +170,9 @@ def run_synthetic_onnx_demo():
     # Validate
     onnx.checker.check_model(model)
     
-    # Save temporarily
-    model_path = "/tmp/synthetic_model.onnx"
+    # Save to cross-platform temporary file
+    with tempfile.NamedTemporaryFile(suffix='.onnx', delete=False) as f:
+        model_path = f.name
     onnx.save(model, model_path)
     print(f"Model saved to: {model_path}")
     

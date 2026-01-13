@@ -499,14 +499,10 @@ class Axes:
             from .colors import colormap
             img = colormap(img, data['cmap'], data['vmin'], data['vmax'])
         
-        # Resize to fit
-        import numpy as np
-        from scipy.ndimage import zoom
-        
+        # Resize to fit using nearest neighbor (no scipy dependency)
         scale_y = h / img.shape[0]
         scale_x = w / img.shape[1]
         
-        # Simple nearest neighbor resize
         resized = np.zeros((h, w, 3), dtype=np.uint8)
         for i in range(h):
             for j in range(w):

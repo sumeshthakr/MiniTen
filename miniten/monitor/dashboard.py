@@ -123,7 +123,7 @@ class Dashboard:
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" integrity="sha384-/FhHKJKLyxN8HQyJVBV+KknCQZBLKPLDSRGIcxNdRXlUxNmjpNXoXlZTMTz1k3bR" crossorigin="anonymous"></script>
     <style>
         * {{
             margin: 0;
