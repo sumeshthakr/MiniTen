@@ -40,21 +40,29 @@ def get_extensions():
 
 def read_requirements():
     """Read requirements from requirements.txt"""
-    with open("requirements.txt", "r") as f:
-        return [line.strip() for line in f if line.strip() and not line.startswith("#")]
+    try:
+        with open("requirements.txt", "r") as f:
+            return [line.strip() for line in f if line.strip() and not line.startswith("#")]
+    except FileNotFoundError:
+        # Fallback to minimal requirements
+        return ["numpy>=1.19", "cython>=0.29"]
 
 
-# Read version from miniten/__init__.py
-version = {}
-with open("miniten/__init__.py") as f:
-    for line in f:
-        if line.startswith("__version__"):
-            exec(line, version)
-            break
+# Read version from miniten/__init__.py safely
+import re
+version = "0.1.0"  # Default version
+try:
+    with open("miniten/__init__.py") as f:
+        content = f.read()
+        match = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', content, re.MULTILINE)
+        if match:
+            version = match.group(1)
+except FileNotFoundError:
+    pass
 
 setup(
     name="miniten",
-    version=version.get("__version__", "0.1.0"),
+    version=version,
     description="A lightweight deep learning framework optimized for edge platforms",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",

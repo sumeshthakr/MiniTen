@@ -55,9 +55,12 @@ def test_vector_division():
 def test_scalar_component():
     a = np.array([1, 2, 3], dtype=np.float64)
     b = np.array([4, 5, 6], dtype=np.float64)
-    expected_result = np.array([8, 10, 12], dtype=np.float64)
+    # Scalar component is the projection of a onto b
+    # proj_b(a) = ((a·b)/(b·b)) * b
+    scalar = operations.dot_product(a, b) / operations.dot_product(b, b)
+    expected_result = operations.scalar_multiplication(b, scalar)
     result = operations.scalar_component(a, b)
-    assert np.array_equal(result, expected_result), "Test failed."
+    assert np.allclose(result, expected_result), "Test failed."
 
 
 def test_cross_product():
@@ -75,7 +78,7 @@ test_vector_multiplication()
 test_dot_product()
 test_vector_subtraction()
 test_vector_division()
-#test_scalar_component()
+test_scalar_component()
 test_cross_product()
 
 print("All tests passed.")

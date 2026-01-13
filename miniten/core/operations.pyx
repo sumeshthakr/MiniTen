@@ -78,7 +78,7 @@ cpdef np.ndarray[np.float64_t, ndim=1] vector_division(np.ndarray[np.float64_t, 
 # Scalar component
 cpdef np.ndarray[np.float64_t, ndim=1] scalar_component(np.ndarray[np.float64_t, ndim=1] a, np.ndarray[np.float64_t, ndim=1] b):
     cdef float scalar = dot_product(a, b) / dot_product(b, b)
-    return scalar * b
+    return scalar_multiplication(b, scalar)
 
 
 # Cross product
