@@ -18,7 +18,23 @@ def get_extensions():
     """
     extensions = []
     
-    # Core module extensions
+    # Determine OpenMP flags
+    if sys.platform == "win32":
+        openmp_compile_args = ["/openmp"]
+        openmp_link_args = []
+        other_compile_args = []
+    elif sys.platform == "darwin":
+        # macOS: Try to use libomp if available
+        openmp_compile_args = ["-Xpreprocessor", "-fopenmp"]
+        openmp_link_args = ["-lomp"]
+        other_compile_args = ["-O3", "-march=native"]
+    else:
+        # Linux and others
+        openmp_compile_args = ["-fopenmp"]
+        openmp_link_args = ["-fopenmp"]
+        other_compile_args = ["-O3", "-march=native"]
+    
+    # Core module extensions (with OpenMP)
     core_sources = [
         "miniten/core/operations.pyx",
         "miniten/core/backprop.pyx",
@@ -31,7 +47,25 @@ def get_extensions():
                 module_name,
                 [source_file],
                 include_dirs=[numpy.get_include()],
-                extra_compile_args=["-O3", "-march=native"] if sys.platform != "win32" else [],
+                extra_compile_args=other_compile_args + openmp_compile_args,
+                extra_link_args=openmp_link_args,
+            )
+            extensions.append(extension)
+    
+    # Neural network module extensions (with OpenMP)
+    nn_sources = [
+        "miniten/nn/layers_impl.pyx",
+    ]
+    
+    for source_file in nn_sources:
+        if os.path.exists(source_file):
+            module_name = source_file.replace("/", ".").replace(".pyx", "")
+            extension = Extension(
+                module_name,
+                [source_file],
+                include_dirs=[numpy.get_include()],
+                extra_compile_args=other_compile_args + openmp_compile_args,
+                extra_link_args=openmp_link_args,
             )
             extensions.append(extension)
     
@@ -48,7 +82,7 @@ def get_extensions():
                 module_name,
                 [source_file],
                 include_dirs=[numpy.get_include()],
-                extra_compile_args=["-O3", "-march=native"] if sys.platform != "win32" else [],
+                extra_compile_args=other_compile_args,
             )
             extensions.append(extension)
     
