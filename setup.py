@@ -60,11 +60,19 @@ try:
 except FileNotFoundError:
     pass
 
+# Read long description safely
+long_description = ""
+try:
+    with open("README.md", "r", encoding="utf-8") as f:
+        long_description = f.read()
+except FileNotFoundError:
+    long_description = "A lightweight deep learning framework optimized for edge platforms"
+
 setup(
     name="miniten",
     version=version,
     description="A lightweight deep learning framework optimized for edge platforms",
-    long_description=open("README.md").read(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
     author="MiniTen Contributors",
     author_email="",
