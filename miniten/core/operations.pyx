@@ -24,6 +24,10 @@ from libc.math cimport exp, tanh, sqrt, fmax
 np.import_array()
 
 # Threshold for using parallel operations
+# Set to 10,000 elements based on empirical testing:
+# - Below 10K: Function call and thread spawn overhead dominates, sequential is faster
+# - Above 10K: Parallelization overhead is amortized, OpenMP provides significant speedup
+# This threshold can be tuned per platform and number of cores
 DEF PARALLEL_THRESHOLD = 10000
 
 

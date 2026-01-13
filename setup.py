@@ -82,7 +82,7 @@ def get_extensions():
                 module_name,
                 [source_file],
                 include_dirs=[numpy.get_include()],
-                extra_compile_args=other_compile_args if sys.platform != "win32" else [],
+                extra_compile_args=other_compile_args,
             )
             extensions.append(extension)
     

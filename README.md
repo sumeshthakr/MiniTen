@@ -251,7 +251,7 @@ MiniTen provides highly optimized Cython implementations with **OpenMP paralleli
 |-----------|-------------|--------------|--------------|-----------------|
 | Vector Addition | 0.29x | 1.05x | **3.75x faster** ⚡ | Parallel speedup |
 | Element-wise Multiply | 0.27x | 1.01x | **3.43x faster** ⚡ | Parallel speedup |
-| Dot Product | 0.73x | 0.31x | 0.11x | NumPy BLAS優れ |
+| Dot Product | 0.73x | 0.31x | 0.11x | NumPy BLAS superior |
 
 **Key Findings:**
 - ✅ **3.75x faster than NumPy** for large vector operations (100K+ elements)
