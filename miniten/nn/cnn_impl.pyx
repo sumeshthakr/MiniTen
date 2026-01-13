@@ -208,6 +208,8 @@ cdef class Conv2d:
         self.grad_weight = np.zeros_like(self.weight)
         if use_bias:
             self.grad_bias = np.zeros(out_channels, dtype=np.float64)
+        else:
+            self.grad_bias = None
         
         self.cached_input = None
         self.cached_col = None

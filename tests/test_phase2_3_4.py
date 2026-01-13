@@ -418,19 +418,15 @@ def test_lr_schedulers():
     """Test learning rate schedulers."""
     from miniten.optim.optim_impl import step_lr, cosine_annealing_lr, warmup_lr
     
-    # Step LR: epoch=10, step_size=5 means 10//5 = 2 decay steps, so 0.1 * 0.1^2 = 0.001
+    # Step LR: after 2 decay steps (epoch=10, step_size=5), lr = 0.1 * 0.1^2 = 0.001
     lr = step_lr(initial_lr=0.1, epoch=10, step_size=5, gamma=0.1)
     assert abs(lr - 0.001) < 1e-10, f"Expected 0.001, got {lr}"
     
-    # Cosine annealing at midpoint (epoch=50, T_max=100)
-    # lr = eta_min + 0.5 * (initial - eta_min) * (1 + cos(50/100 * pi)) = 0 + 0.5 * 0.1 * (1 + 0) = 0.05
-    # Actually at epoch=50, cos(pi/2) = 0, so lr = 0.5 * 0.1 * 1 = 0.05
-    # Wait, let's check: (1 + cos(50/100 * pi)) = 1 + cos(0.5*pi) = 1 + 0 = 1, so lr = 0.05
-    # But at epoch=100, cos(pi) = -1, so lr = 0.5 * 0.1 * (1-1) = 0
+    # Cosine annealing at midpoint should be ~0.05
     lr = cosine_annealing_lr(initial_lr=0.1, epoch=50, T_max=100)
     assert 0.04 < lr < 0.06, f"Expected ~0.05, got {lr}"
     
-    # Warmup
+    # Warmup: at step 5/10, lr = 0.1 * 0.5 = 0.05
     lr = warmup_lr(target_lr=0.1, current_step=5, warmup_steps=10)
     assert abs(lr - 0.05) < 1e-10
     

@@ -80,6 +80,8 @@ cdef class GraphConv:
         self.grad_weight = np.zeros_like(self.weight)
         if use_bias:
             self.grad_bias = np.zeros(out_features, dtype=np.float64)
+        else:
+            self.grad_bias = None
         
         self.cached_input = None
         self.cached_adj_norm = None
