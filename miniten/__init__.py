@@ -7,9 +7,10 @@ built entirely in Python and Cython with minimal external dependencies.
 Key Features:
 - Optimized for edge platforms with minimal footprint
 - Pure Python/Cython implementation
-- Support for CNNs, RNNs, LSTMs, GNNs, and Reinforcement Learning
-- GPU acceleration for edge devices
-- Processing for images, audio, video, language, and signals
+- Support for CNNs, RNNs, LSTMs, GNNs, and Transformers
+- Built-in visualization engine (fast plotting)
+- Training monitoring system (like TensorBoard)
+- Edge deployment tools (quantization, pruning, ONNX)
 - Comprehensive documentation and examples
 
 Modules:
@@ -17,30 +18,63 @@ Modules:
 - nn: Neural network layers and building blocks
 - optim: Optimization algorithms
 - utils: Utility functions and data processing
-- gpu: GPU acceleration backends
+- viz: Visualization engine (fast plotting)
+- monitor: Training monitoring and callbacks
+- edge: Edge deployment (quantization, pruning, export)
 
 Example:
     >>> import miniten as mt
-    >>> # Create a simple neural network
-    >>> # model = mt.nn.Sequential([...])
+    >>> from miniten.monitor import MetricsLogger
+    >>> from miniten.viz import Figure
+    >>> 
+    >>> # Log training metrics
+    >>> logger = MetricsLogger("./runs")
+    >>> logger.log("loss", 0.5, step=1)
+    >>> 
+    >>> # Create visualizations
+    >>> fig = Figure()
+    >>> ax = fig.add_subplot()
+    >>> ax.plot([1, 2, 3], [1, 4, 9])
+    >>> fig.save("plot.png")
     
-Version: 0.1.0
+Version: 0.2.0
 Author: MiniTen Contributors
 License: MIT
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "MiniTen Contributors"
 __license__ = "MIT"
 
-# Core imports will be added as modules are implemented
-# from .core import *
-# from .nn import *
-# from .optim import *
-# from .utils import *
+# Import submodules for easy access
+from . import nn
+from . import optim
+from . import utils
+
+# Try to import optional modules
+try:
+    from . import viz
+except ImportError:
+    viz = None
+
+try:
+    from . import monitor
+except ImportError:
+    monitor = None
+
+try:
+    from . import edge
+except ImportError:
+    edge = None
 
 __all__ = [
     "__version__",
     "__author__",
     "__license__",
+    "nn",
+    "optim",
+    "utils",
+    "viz",
+    "monitor",
+    "edge",
 ]

@@ -174,6 +174,7 @@ cpdef void draw_circle(np.ndarray[np.uint8_t, ndim=3] canvas,
     cdef int width = canvas.shape[1]
     cdef int x, y
     cdef int r2 = radius * radius
+    cdef int dist2
     cdef unsigned char r = color[0]
     cdef unsigned char g = color[1]
     cdef unsigned char b = color[2]
@@ -187,7 +188,7 @@ cpdef void draw_circle(np.ndarray[np.uint8_t, ndim=3] canvas,
                     canvas[y, x, 2] = b
             else:
                 # Circle outline
-                cdef int dist2 = (x - cx) * (x - cx) + (y - cy) * (y - cy)
+                dist2 = (x - cx) * (x - cx) + (y - cy) * (y - cy)
                 if r2 - radius <= dist2 <= r2 + radius:
                     canvas[y, x, 0] = r
                     canvas[y, x, 1] = g
