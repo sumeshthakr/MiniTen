@@ -1,0 +1,33 @@
+[
+  {
+    "framework": "MiniTen",
+    "train_time": 1.6014599800109863,
+    "final_loss": 0.21787094922131964,
+    "final_accuracy": 1.0,
+    "latency_ms": 4.456377029418945,
+    "epochs": 10,
+    "use_cython": true
+  },
+  {
+    "framework": "PyTorch",
+    "version": "2.9.1+cu128",
+    "device": "cpu",
+    "train_time": 0.8604650497436523,
+    "final_loss": 0.09910795390605927,
+    "final_accuracy": 1.0,
+    "latency_ms": 1.275479793548584,
+    "epochs": 10,
+    "n_params": 9098
+  },
+  {
+    "framework": "TensorFlow",
+    "version": "2.20.0",
+    "device": "CPU",
+    "train_time": 4.195514440536499,
+    "final_loss": "0.08097907",
+    "final_accuracy": 1.0,
+    "latency_ms": 6.001214981079102,
+    "epochs": 10,
+    "n_params": 9098
+  }
+]
