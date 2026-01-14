@@ -464,19 +464,26 @@ class MemoryProfiler:
     
     def get_current_memory(self) -> int:
         """Get current memory usage in bytes."""
+        import os
+        import sys
+        
         try:
-            import os
-            import sys
-            
             if sys.platform == 'linux':
-                with open('/proc/self/statm', 'r') as f:
-                    pages = int(f.read().split()[1])
-                    return pages * os.sysconf('SC_PAGE_SIZE')
-            else:
-                # Fallback: rough estimate
+                try:
+                    with open('/proc/self/statm', 'r') as f:
+                        pages = int(f.read().split()[1])
+                        return pages * os.sysconf('SC_PAGE_SIZE')
+                except (OSError, IOError, ValueError, IndexError):
+                    # Fallback if /proc is not available
+                    pass
+            
+            # Fallback for non-Linux or if /proc access failed
+            try:
                 import gc
                 gc.collect()
                 return sum(sys.getsizeof(obj) for obj in gc.get_objects())
+            except Exception:
+                return 0
         except Exception:
             return 0
     

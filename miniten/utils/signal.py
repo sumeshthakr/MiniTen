@@ -127,6 +127,8 @@ def ifft(real: List[float], imag: List[float]) -> List[float]:
     """
     Compute Inverse Fast Fourier Transform.
     
+    Uses the relationship: IFFT(x) = conj(FFT(conj(x))) / N
+    
     Args:
         real: Real part of spectrum
         imag: Imaginary part of spectrum
@@ -138,57 +140,73 @@ def ifft(real: List[float], imag: List[float]) -> List[float]:
     if n == 0:
         return []
     
-    # Conjugate
+    # Conjugate the input
     imag_conj = [-x for x in imag]
     
-    # Forward FFT
-    result_real, result_imag = fft(real)
+    # Pad to power of 2 if necessary
+    n_padded = _next_power_of_2(n)
+    if n_padded > n:
+        real = list(real) + [0.0] * (n_padded - n)
+        imag_conj = list(imag_conj) + [0.0] * (n_padded - n)
+    else:
+        real = list(real)
+        imag_conj = list(imag_conj)
     
-    # Apply conjugate transform
-    real_copy = list(real)
-    imag_copy = imag_conj
+    # Apply forward FFT to conjugated input
+    result_real, result_imag = _fft_core(real, imag_conj)
+    
+    # Conjugate and scale the result
+    return [r / n_padded for r in result_real]
+
+
+def _fft_core(real: List[float], imag: List[float]) -> Tuple[List[float], List[float]]:
+    """
+    Core FFT computation (Cooley-Tukey radix-2).
+    Assumes input is already padded to power of 2.
+    """
+    n = len(real)
+    if n <= 1:
+        return real, imag
     
     # Bit reversal
-    n_padded = _next_power_of_2(n)
     bits = 0
-    temp = n_padded
+    temp = n
     while temp > 1:
         temp //= 2
         bits += 1
     
-    for i in range(n_padded):
+    for i in range(n):
         j = _bit_reverse(i, bits)
         if i < j:
-            real_copy[i], real_copy[j] = real_copy[j], real_copy[i]
-            imag_copy[i], imag_copy[j] = imag_copy[j], imag_copy[i]
+            real[i], real[j] = real[j], real[i]
+            imag[i], imag[j] = imag[j], imag[i]
     
     # FFT butterfly
     size = 2
-    while size <= n_padded:
+    while size <= n:
         half_size = size // 2
         angle_step = -2 * math.pi / size
         
-        for start in range(0, n_padded, size):
+        for start in range(0, n, size):
             for k in range(half_size):
                 angle = angle_step * k
                 cos_val = math.cos(angle)
                 sin_val = math.sin(angle)
                 
-                i = start + k
-                j = start + k + half_size
+                i_idx = start + k
+                j_idx = start + k + half_size
                 
-                t_real = cos_val * real_copy[j] - sin_val * imag_copy[j]
-                t_imag = sin_val * real_copy[j] + cos_val * imag_copy[j]
+                t_real = cos_val * real[j_idx] - sin_val * imag[j_idx]
+                t_imag = sin_val * real[j_idx] + cos_val * imag[j_idx]
                 
-                real_copy[j] = real_copy[i] - t_real
-                imag_copy[j] = imag_copy[i] - t_imag
-                real_copy[i] = real_copy[i] + t_real
-                imag_copy[i] = imag_copy[i] + t_imag
+                real[j_idx] = real[i_idx] - t_real
+                imag[j_idx] = imag[i_idx] - t_imag
+                real[i_idx] = real[i_idx] + t_real
+                imag[i_idx] = imag[i_idx] + t_imag
         
         size *= 2
     
-    # Scale
-    return [x / n for x in real_copy]
+    return real, imag
 
 
 def rfft(signal: List[float]) -> Tuple[List[float], List[float]]:

@@ -443,9 +443,9 @@ class DQN:
                     for j in range(len(grad)):
                         new_grad[k] += grad[j] * layer['weights'][k][j]
                 
-                # ReLU derivative
-                new_grad = [g if prev_activation[k] > 0 else 0 
-                           for k, g in enumerate(new_grad)]
+                # ReLU derivative: gradient is passed through if activation > 0
+                new_grad = [new_grad[k] if prev_activation[k] > 0 else 0.0 
+                           for k in range(len(new_grad))]
                 grad = new_grad
     
     def update(self, batch_size: int = 32):

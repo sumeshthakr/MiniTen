@@ -492,14 +492,14 @@ def remove_emails(text: str) -> str:
 ENGLISH_STOPWORDS = {
     'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
     'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'that', 'the',
-    'to', 'was', 'were', 'will', 'with', 'the', 'this', 'but', 'they',
+    'to', 'was', 'were', 'will', 'with', 'this', 'but', 'they',
     'have', 'had', 'what', 'when', 'where', 'who', 'which', 'why', 'how',
     'all', 'each', 'every', 'both', 'few', 'more', 'most', 'other', 'some',
     'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too',
     'very', 'can', 'just', 'should', 'now', 'i', 'me', 'my', 'myself', 'we',
-    'our', 'you', 'your', 'he', 'him', 'his', 'she', 'her', 'it', 'its',
-    'they', 'them', 'their', 'am', 'been', 'being', 'do', 'does', 'did',
-    'doing', 'would', 'could', 'might', 'must', 'shall', 'should', 'would'
+    'our', 'you', 'your', 'him', 'his', 'she', 'her', 
+    'them', 'their', 'am', 'been', 'being', 'do', 'does', 'did',
+    'doing', 'would', 'could', 'might', 'must', 'shall'
 }
 
 
